@@ -1,68 +1,72 @@
-export function generateAudit({
-  tool,
-  plan,
-  spend,
-  teamSize,
-  useCase,
-}) {
-  let recommendation = "";
-  let savings = 0;
-  let reason = "";
+export function generateAudit(data) {
+  const spend = Number(data.spend);
 
-  // Team plan for solo users
+  // ChatGPT Team overpriced for solo users
   if (
-    (plan.toLowerCase() === "team" ||
-      plan.toLowerCase() === "business") &&
-    Number(teamSize) <= 1
+    data.tool === "ChatGPT" &&
+    data.plan === "Team" &&
+    Number(data.teamSize) <= 1
   ) {
-    recommendation = "Downgrade to a cheaper individual plan";
-    savings = spend * 0.5;
+    return {
+      recommendation:
+        "Switch from ChatGPT Team to ChatGPT Plus",
 
-    reason =
-      "You're paying for collaboration features that solo users typically don't need.";
+      savings: 60,
+
+      annualSavings: 720,
+
+      reason:
+        "Team plans are designed for collaboration. Solo users typically get the same value from Plus."
+    };
   }
 
-  // Enterprise for small teams
-  else if (
-    plan.toLowerCase() === "enterprise" &&
-    Number(teamSize) < 10
+  // Cursor Business too expensive
+  if (
+    data.tool === "Cursor" &&
+    data.plan === "Business" &&
+    spend > 40
   ) {
-    recommendation = "Switch to a business/team plan";
+    return {
+      recommendation:
+        "Downgrade to Cursor Pro",
 
-    savings = spend * 0.4;
+      savings: 25,
 
-    reason =
-      "Enterprise pricing usually makes sense only for larger organizations.";
+      annualSavings: 300,
+
+      reason:
+        "Most small teams don't fully utilize Business-only features."
+    };
   }
 
-  // Coding-specific recommendation
-  else if (
-    useCase.toLowerCase() === "coding" &&
-    tool.toLowerCase() === "chatgpt"
+  // Claude Pro alternative
+  if (
+    data.tool === "Claude" &&
+    spend > 100
   ) {
-    recommendation =
-      "Consider Cursor or GitHub Copilot for coding workflows";
+    return {
+      recommendation:
+        "Consider mixed usage with ChatGPT Plus",
 
-    savings = spend * 0.3;
+      savings: 30,
 
-    reason =
-      "Developer-focused AI tools may offer better productivity per dollar.";
+      annualSavings: 360,
+
+      reason:
+        "Many research and writing tasks can be split across lower-cost models."
+    };
   }
 
-  // Already optimized
-  else {
-    recommendation = "Your AI stack looks cost-efficient";
-
-    savings = 0;
-
-    reason =
-      "No major overspending patterns were detected.";
-  }
-
+  // default
   return {
-    recommendation,
-    savings: Math.round(savings),
-    annualSavings: Math.round(savings * 12),
-    reason,
+    recommendation:
+      "Your current setup looks efficient",
+
+    savings: 0,
+
+    annualSavings: 0,
+
+    reason:
+      "No major optimization opportunities detected based on your usage."
   };
 }

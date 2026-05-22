@@ -119,30 +119,54 @@ export default function AuditForm() {
         Generate Audit
       </button>
 
-      {/* Results */}
       {result && (
-        <div className="rounded-lg bg-zinc-900 p-6 mt-6">
-          <h2 className="text-2xl font-bold">
-            Audit Results
-          </h2>
+  <div className="mt-8 rounded-2xl border border-zinc-800 bg-black p-8">
+    <div className="flex items-center justify-between">
+      <div>
+        <p className="text-zinc-400">
+          Estimated Savings
+        </p>
 
-          <p className="mt-4">
-            Recommendation: {result.recommendation}
-          </p>
+        <h2 className="mt-2 text-5xl font-bold text-green-400">
+          ${result.savings}/mo
+        </h2>
 
-          <p className="mt-2">
-            Monthly Savings: ${result.savings}
-          </p>
+        <p className="mt-2 text-zinc-500">
+          ${result.annualSavings}/year
+        </p>
+      </div>
 
-          <p className="mt-2">
-            Annual Savings: ${result.annualSavings}
-          </p>
+      <div className="rounded-xl bg-green-500/10 px-4 py-2 text-green-400">
+        Optimizable
+      </div>
+    </div>
 
-          <p className="mt-4 text-zinc-400">
-            {result.reason}
-          </p>
-        </div>
-      )}
+    <div className="mt-8 border-t border-zinc-800 pt-6">
+      <h3 className="text-xl font-semibold">
+        Recommendation
+      </h3>
+
+      <p className="mt-3 text-zinc-300">
+        {result.recommendation}
+      </p>
+
+      <p className="mt-4 text-zinc-500">
+        {result.reason}
+      </p>
+    </div>
+
+    <div className="mt-8 rounded-xl bg-zinc-900 p-5">
+      <p className="text-sm text-zinc-400">
+        Potential Optimization
+      </p>
+
+      <p className="mt-2 text-lg">
+        Switch to a lower-cost plan or use
+        discounted AI infrastructure credits through Credex.
+      </p>
+    </div>
+  </div>
+)}
     </div>
   );
 }
