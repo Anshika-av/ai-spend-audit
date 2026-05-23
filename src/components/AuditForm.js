@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { generateAudit } from "@/lib/auditEngine";
+import { supabase } from "@/lib/supabase";
 
 export default function AuditForm() {
   const [tool, setTool] = useState("");
@@ -9,6 +10,7 @@ export default function AuditForm() {
   const [spend, setSpend] = useState("");
   const [teamSize, setTeamSize] = useState("");
   const [useCase, setUseCase] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [result, setResult] = useState(null);
 
@@ -101,23 +103,45 @@ export default function AuditForm() {
         <option value="mixed">Mixed</option>
       </select>
 
-      {/* Generate Button */}
-      <button
-        onClick={() => {
-          const audit = generateAudit({
-            tool,
-            plan,
-            spend: Number(spend),
-            teamSize,
-            useCase,
-          });
+     <button
+  onClick={async () => {
+    setLoading(true);
+    const audit = generateAudit({
+      tool,
+      plan,
+      spend: Number(spend),
+      teamSize,
+      useCase,
+    });
 
-          setResult(audit);
-        }}
-        className="rounded-lg bg-white px-6 py-4 text-black font-semibold hover:bg-zinc-200"
-      >
-        Generate Audit
-      </button>
+    setResult(audit);
+
+    const { data, error } = await supabase
+      .from("audits")
+      .insert([
+        {
+          tool,
+          plan,
+          spend: Number(spend),
+          team_size: Number(teamSize),
+          use_case: useCase,
+          monthly_savings: audit.savings,
+          annual_savings: audit.annualSavings,
+          recommendation: audit.recommendation,
+        },
+      ]);
+
+    console.log(data);
+
+    if (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  }}
+  className="rounded-lg bg-white px-6 py-4 text-black font-semibold hover:bg-zinc-200"
+>
+  {loading ? "Analyzing..." : "Generate Audit"}
+</button>
       {result && (
   <div className="mt-10 space-y-6">
 
