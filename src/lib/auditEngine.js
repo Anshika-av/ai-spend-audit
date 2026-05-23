@@ -1,30 +1,31 @@
 export function generateAudit(data) {
   const spend = Number(data.spend);
+  const teamSize = Number(data.teamSize);
 
-  // ChatGPT Team overpriced for solo users
+  // ChatGPT Team for solo users
   if (
     data.tool === "ChatGPT" &&
     data.plan === "Team" &&
-    Number(data.teamSize) <= 1
+    teamSize <= 1
   ) {
     return {
       recommendation:
-        "Switch from ChatGPT Team to ChatGPT Plus",
+        "Switch to ChatGPT Plus",
 
       savings: 60,
 
       annualSavings: 720,
 
       reason:
-        "Team plans are designed for collaboration. Solo users typically get the same value from Plus."
+        "Team plans are optimized for collaboration, not solo usage."
     };
   }
 
-  // Cursor Business too expensive
+  // Cursor Business overkill
   if (
     data.tool === "Cursor" &&
     data.plan === "Business" &&
-    spend > 40
+    teamSize < 3
   ) {
     return {
       recommendation:
@@ -35,38 +36,57 @@ export function generateAudit(data) {
       annualSavings: 300,
 
       reason:
-        "Most small teams don't fully utilize Business-only features."
+        "Small teams rarely need advanced admin controls included in Business."
     };
   }
 
-  // Claude Pro alternative
+  // Claude heavy spend
   if (
     data.tool === "Claude" &&
-    spend > 100
+    spend > 150
   ) {
     return {
       recommendation:
-        "Consider mixed usage with ChatGPT Plus",
+        "Mix Claude with ChatGPT Plus",
+
+      savings: 40,
+
+      annualSavings: 480,
+
+      reason:
+        "Research and writing workflows can often be split across lower-cost tools."
+    };
+  }
+
+  // Copilot Team unnecessary
+  if (
+    data.tool === "Copilot" &&
+    data.plan === "Business" &&
+    teamSize <= 2
+  ) {
+    return {
+      recommendation:
+        "Use GitHub Copilot Individual",
 
       savings: 30,
 
       annualSavings: 360,
 
       reason:
-        "Many research and writing tasks can be split across lower-cost models."
+        "Business features provide limited ROI for very small engineering teams."
     };
   }
 
   // default
   return {
     recommendation:
-      "Your current setup looks efficient",
+      "Your AI stack already looks cost-efficient",
 
     savings: 0,
 
     annualSavings: 0,
 
     reason:
-      "No major optimization opportunities detected based on your usage."
+      "No major optimization opportunities detected."
   };
 }

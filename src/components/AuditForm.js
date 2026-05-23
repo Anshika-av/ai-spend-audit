@@ -118,53 +118,72 @@ export default function AuditForm() {
       >
         Generate Audit
       </button>
-
       {result && (
-  <div className="mt-8 rounded-2xl border border-zinc-800 bg-black p-8">
-    <div className="flex items-center justify-between">
-      <div>
-        <p className="text-zinc-400">
-          Estimated Savings
-        </p>
+  <div className="mt-10 space-y-6">
 
-        <h2 className="mt-2 text-5xl font-bold text-green-400">
-          ${result.savings}/mo
-        </h2>
+    {/* Savings Hero Card */}
+    <div className="rounded-2xl border border-green-500/20 bg-green-500/10 p-8">
+      <p className="text-sm uppercase tracking-wide text-green-400">
+        Estimated Savings
+      </p>
 
-        <p className="mt-2 text-zinc-500">
-          ${result.annualSavings}/year
-        </p>
-      </div>
-
-      <div className="rounded-xl bg-green-500/10 px-4 py-2 text-green-400">
-        Optimizable
-      </div>
-    </div>
-
-    <div className="mt-8 border-t border-zinc-800 pt-6">
-      <h3 className="text-xl font-semibold">
-        Recommendation
-      </h3>
+      <h2 className="mt-3 text-6xl font-bold text-green-400">
+        ${result.savings}
+        <span className="text-2xl text-green-300">
+          /month
+        </span>
+      </h2>
 
       <p className="mt-3 text-zinc-300">
+        Potential annual savings:
+        {" "}
+        <span className="font-semibold text-white">
+          ${result.annualSavings}
+        </span>
+      </p>
+    </div>
+
+    {/* Recommendation Card */}
+    <div className="rounded-2xl border border-zinc-800 bg-zinc-950 p-8">
+      <div className="flex items-center justify-between">
+        <h3 className="text-2xl font-bold">
+          Recommendation
+        </h3>
+
+        <div className="rounded-full bg-green-500/10 px-4 py-2 text-sm text-green-400">
+          Optimization Found
+        </div>
+      </div>
+
+      <p className="mt-6 text-xl text-white">
         {result.recommendation}
       </p>
 
-      <p className="mt-4 text-zinc-500">
+      <p className="mt-4 leading-7 text-zinc-400">
         {result.reason}
       </p>
     </div>
 
-    <div className="mt-8 rounded-xl bg-zinc-900 p-5">
-      <p className="text-sm text-zinc-400">
-        Potential Optimization
+    {/* Credex CTA */}
+    <div className="rounded-2xl border border-zinc-800 bg-black p-8">
+      <p className="text-sm uppercase tracking-wide text-zinc-500">
+        Next Step
       </p>
 
-      <p className="mt-2 text-lg">
-        Switch to a lower-cost plan or use
-        discounted AI infrastructure credits through Credex.
+      <h3 className="mt-3 text-2xl font-bold">
+        Reduce Your AI Infrastructure Costs
+      </h3>
+
+      <p className="mt-4 text-zinc-400">
+        Credex helps startups access discounted AI credits
+        for ChatGPT, Claude, Cursor, Gemini, and more.
       </p>
+
+      <button className="mt-6 rounded-xl bg-white px-6 py-4 font-semibold text-black hover:bg-zinc-200">
+        Book Credex Consultation
+      </button>
     </div>
+
   </div>
 )}
     </div>
