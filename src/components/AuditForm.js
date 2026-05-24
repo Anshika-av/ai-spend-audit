@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { generateAudit } from "@/lib/auditEngine";
 import { supabase } from "@/lib/supabase";
+import { generateSummary } from "@/lib/generateSummary";
 
 export default function AuditForm() {
   const [tool, setTool] = useState("");
@@ -11,6 +12,9 @@ export default function AuditForm() {
   const [teamSize, setTeamSize] = useState("");
   const [useCase, setUseCase] = useState("");
   const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [company, setCompany] = useState("");
+  const [role, setRole] = useState("");
 
   const [result, setResult] = useState(null);
 
@@ -187,7 +191,15 @@ export default function AuditForm() {
         {result.reason}
       </p>
     </div>
+    <div className="rounded-2xl border border-zinc-800 bg-zinc-950 p-8">
+  <h3 className="text-2xl font-bold">
+    AI Summary
+  </h3>
 
+    <p className="mt-4 leading-7 text-zinc-400 whitespace-pre-line">
+    {generateSummary(result)}
+    </p>
+    </div>
     {/* Credex CTA */}
     <div className="rounded-2xl border border-zinc-800 bg-black p-8">
       <p className="text-sm uppercase tracking-wide text-zinc-500">
@@ -206,7 +218,60 @@ export default function AuditForm() {
       <button className="mt-6 rounded-xl bg-white px-6 py-4 font-semibold text-black hover:bg-zinc-200">
         Book Credex Consultation
       </button>
-    </div>
+        </div>
+
+<div className="rounded-2xl border border-zinc-800 bg-zinc-950 p-8">
+  <h3 className="text-2xl font-bold">
+    Get Full Audit Report
+  </h3>
+
+  <p className="mt-2 text-zinc-400">
+    Receive your audit summary and future savings alerts.
+  </p>
+
+  <div className="mt-6 space-y-4">
+    <input
+      type="email"
+      placeholder="Email Address"
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+      className="w-full rounded-lg bg-zinc-900 p-4"
+    />
+
+    <input
+      type="text"
+      placeholder="Company Name"
+      value={company}
+      onChange={(e) => setCompany(e.target.value)}
+      className="w-full rounded-lg bg-zinc-900 p-4"
+    />
+
+    <input
+      type="text"
+      placeholder="Your Role"
+      value={role}
+      onChange={(e) => setRole(e.target.value)}
+      className="w-full rounded-lg bg-zinc-900 p-4"
+    />
+
+    <button
+      onClick={async () => {
+        await supabase.from("leads").insert([
+          {
+            email,
+            company,
+            role,
+          },
+        ]);
+
+        alert("Lead captured successfully!");
+      }}
+      className="w-full rounded-lg bg-green-500 px-6 py-4 font-semibold text-black"
+    >
+      Get My Full Report
+    </button>
+  </div>
+</div>
 
   </div>
 )}
